@@ -1,0 +1,42 @@
+<!doctype html>
+
+<html>
+<head>
+	<style>
+		.target_color {
+			height: 20px;
+			width: 50px;
+			border: 1px solid black;
+			margin: 5px;
+			position:relative;
+		}
+
+		#color_map {
+			border: 0px;
+		}
+
+		h1 {
+			font-family: Serif;
+			font-size: 18px;
+			min-width: 100px;
+		}
+
+		.highlighted {
+			border: 1px dashed blue;
+			left: 1px;
+			top: 1px;
+		}
+
+		#target_selector {
+			width: 100px;
+		};
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="popup.js"></script>
+</head>
+<body>
+	<input id="target_selector" type="text"></input>
+	<div id="color_map"></div>
+</body>
+</html>
+
