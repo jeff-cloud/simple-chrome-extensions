@@ -1,4 +1,3 @@
 simple-chrome-extensions
 ========================
-
-Some simple but useful chrome extensions
+BackgroundColor: Change the background color for any web pages.

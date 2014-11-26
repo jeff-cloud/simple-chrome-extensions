@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+	<style>
+		#color_demo {
+			height: 20px;
+			width: 100px;
+			border: 1px solid black;
+			border-radius: 10%;
+		}
+
+		.option_box {
+			height: 22px;
+			width: 650px;
+			margin: 0px;
+			position: relative;
+			margin: 2px;
+		}
+
+		.left {
+			position: relative;
+			float: left;
+		}
+
+		.right {
+			position: relative;
+			float: right;
+		}
+
+		input {
+			width: 500px;
+		}
+
+		label {
+			width: 100px;
+			margin-right: 10px;
+		}
+
+		div.option_box:nth-child(odd) {
+			background-color: #eef7fa;
+		}
+
+		div.option_box:nth-child(even) {
+			background-color: #e6f3f7;
+		}
+
+		div.outer {
+			width: 653px;
+			border: 1px solid blue;
+		}
+
+		div.submit_box {
+			position: relative;
+			margin-top: 2px;
+		}
+
+		div.button_box {
+			position: relative;
+			float: right;
+			margin: 0px;
+			width: 210px;
+		}
+
+		button.submit_button {
+			width: 100px;
+			/*float: right; */
+			position: relative;
+			/* right: 5px; */
+
+		}
+
+
+
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+	<script src="save_rule.js"></script>
+</head>
+<body>
+	<div class="outer">
+	<div class="option_box">
+		<label class="left">Page URL/Pattern:</label>
+		<input class="right" id="page" type="text"></input>
+	</div>
+	<div class="option_box">
+		<label class="left">CSS Selector:</label>
+		<input class="right" id="selector" type="text"></input>
+	</div>
+	<div class="option_box">
+		<label class="left">Color:</label>
+		<div class="right" id="color_demo"></div>
+	</div>
+	</div>
+	<div class="submit_box">
+		<div class="button_box">
+		<button class="submit_button" id="save">Save</button>
+		<button class="submit_button" id="cancel">Cancel</button>
+		</div>
+	</div>
+</body>
+</html>

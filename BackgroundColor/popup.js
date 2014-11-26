@@ -1,4 +1,8 @@
+var lastSelector = "div";
+
 $(document).ready( function() {
+
+	$('#target_selector').val(lastSelector);
 	
 	/*
 	 * http://hex-color.com/code/e1deb3
@@ -36,11 +40,15 @@ $(document).ready( function() {
 		var targetSelector = $('#target_selector').val().trim();
 		var targetColor = $(this).css('background-color');
 
+		//save the choice
+		lastSelector = targetSelector;
+
 		console.log('target selector = ' + targetSelector);
 		if(!targetSelector || targetSelector.length == 0) {
 			chrome.tabs.executeScript(
 				{code : 'document.body.style.backgroundColor="' + targetColor + '"'});
 			console.log('No selector is specified');
+			postRuleUpdate( 'body', targetColor );
 			return;
 		}		
 
@@ -51,8 +59,15 @@ $(document).ready( function() {
 					color: targetColor
 				});
 			});
+
+			postRuleUpdate( targetSelector, targetColor );
 	});
 
 
 });
 
+var ruleUpdatePort = chrome.runtime.connect( { name: 'rule.update' } );
+
+function postRuleUpdate(selector, color) {
+	ruleUpdatePort.postMessage( { selector : selector, color : color } );
+}
