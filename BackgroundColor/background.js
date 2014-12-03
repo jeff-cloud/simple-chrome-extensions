@@ -3,7 +3,7 @@
 console.log("Create context menus");
 
 chrome.contextMenus.create( {
-	"title": "Add Last Rule to Page",
+	"title": "Add page to preconfig",
 	"contexts": ["page"],
 	"onclick": saveRule
 });
@@ -12,11 +12,10 @@ function saveRule(info) {
 	var details = {};
 
 	lastPage = info.pageUrl;
-	chrome.windows.create( { 
-		url: 'save_rule.html', 
-		type: 'popup', 
-		width: 700, 
-		height: 150 } );
+	var ans = prompt("Modify the page pattern", lastPage);
+	if(ans) {
+		preconfigPages.push(ans);
+	}
 	
 }
 
@@ -31,12 +30,13 @@ var preconfigPages = [
 
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
+		// handle page.render request from content script
 		if(sender.tab && request.type === 'page.render' ) {
-			//only handle messages from tabs
-			var url = sender.tab.url;
-			console.log("Background color update inquery from : " + url);
-
 			(function() {
+				//only handle messages from tabs
+				var url = sender.tab.url;
+				console.log("Background color update inquery from : " + url);
+
 				var pIndex;
 				var pattern;
 
@@ -54,6 +54,25 @@ chrome.runtime.onMessage.addListener(
 				}
 			}());
 
+		} 
+		//nandle page.list request from option page
+		else if(request.type === 'page.list' ) {
+			(function() {
+				console.log("Option page requests a list of preconfigured pages.");
+
+				//simply response with the list of pages
+				sendResponse(preconfigPages);
+			}());
+		}
+		else if(request.type === 'page.del' ) {
+			(function() {
+				console.log("Option page requests a delete on page " + request.page);
+				var index = preconfigPages.indexOf(request.page);
+				if(index > -1) {
+					preconfigPages.splice(index, 1);
+				}
+				sendResponse(null);
+			}());
 		} else {
 			return;
 		}
