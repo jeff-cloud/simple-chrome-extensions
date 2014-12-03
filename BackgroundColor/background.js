@@ -14,19 +14,57 @@ function saveRule(info) {
 	lastPage = info.pageUrl;
 	var ans = prompt("Modify the page pattern", lastPage);
 	if(ans) {
-		preconfigPages.push(ans);
+		addAndSaveOnePreconfigPage(ans);
 	}
 	
 }
 
 var defaultColor = "rgb(191, 189, 152)";
 var defaultSelector = "div";
-var preconfigPages = [
-	"https://www.google.com/webhp",
-	"https://www.google.com/search?",
-	"http://confluence/display",
-	"http://en.wikipedia.org/wiki"
-];
+var preconfigPages = [];
+
+var preconfigLoaded = false;
+
+function loadPreconfigPages() {
+	//already loaded
+	if(preconfigLoaded) {
+		return;
+	}
+
+	if(localStorage['preconfig']) {
+		preconfigPages = JSON.parse(localStorage['preconfig']);
+	}
+
+	preconfigLoaded = true;
+}
+
+function savePreconfigPages() {
+	localStorage['preconfig'] = JSON.stringify(preconfigPages);
+	preconfigLoaded = false;
+}
+
+function addAndSaveOnePreconfigPage(pagePattern) {
+	//sync the config first
+	loadPreconfigPages();
+
+	preconfigPages.push(pagePattern);
+
+	//save it back
+	savePreconfigPages();
+}
+
+function delAndSaveOnePreconfigPage(pagePattern) {
+	//sync the config first
+	loadPreconfigPages();
+
+	var index = preconfigPages.indexOf(request.page);
+	if(index > -1) {
+		preconfigPages.splice(index, 1);
+	}
+
+	savePreconfigPages();
+}
+
 
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
@@ -39,6 +77,8 @@ chrome.runtime.onMessage.addListener(
 
 				var pIndex;
 				var pattern;
+
+				loadPreconfigPages();
 
 				for(pIndex = 0; pIndex < preconfigPages.length; ++pIndex) {
 					pattern = preconfigPages[pIndex];
@@ -61,16 +101,15 @@ chrome.runtime.onMessage.addListener(
 				console.log("Option page requests a list of preconfigured pages.");
 
 				//simply response with the list of pages
+				loadPreconfigPages();
 				sendResponse(preconfigPages);
 			}());
 		}
 		else if(request.type === 'page.del' ) {
 			(function() {
 				console.log("Option page requests a delete on page " + request.page);
-				var index = preconfigPages.indexOf(request.page);
-				if(index > -1) {
-					preconfigPages.splice(index, 1);
-				}
+
+				delAndSaveOnePreconfigPage(request.page);
 				sendResponse(null);
 			}());
 		} else {
