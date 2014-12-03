@@ -57,7 +57,7 @@ function delAndSaveOnePreconfigPage(pagePattern) {
 	//sync the config first
 	loadPreconfigPages();
 
-	var index = preconfigPages.indexOf(request.page);
+	var index = preconfigPages.indexOf(pagePattern);
 	if(index > -1) {
 		preconfigPages.splice(index, 1);
 	}
