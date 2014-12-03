@@ -20,13 +20,14 @@ function saveRule(info) {
 	
 }
 
-var preconfiguredPages = {
- 	"https://www.google.com/webhp":  [ { selector : "div", color : "rgb(191, 189, 152)" } ],
- 	"https://www.google.com/search?":  [ { selector : "div", color : "rgb(191, 189, 152)" } ],
-	"http://confluence/display"   :  [ { selector : "div", color : "rgb(191, 189, 152)" } ],
-	"http://en.wikipedia.org/wiki"   :  [ { selector : "div", color : "rgb(191, 189, 152)" } ] 
-};
-
+var defaultColor = "rgb(191, 189, 152)";
+var defaultSelector = "div";
+var preconfigPages = [
+	"https://www.google.com/webhp",
+	"https://www.google.com/search?",
+	"http://confluence/display",
+	"http://en.wikipedia.org/wiki"
+];
 
 chrome.runtime.onMessage.addListener(
 	function(request, sender, sendResponse) {
@@ -35,16 +36,24 @@ chrome.runtime.onMessage.addListener(
 			var url = sender.tab.url;
 			console.log("Background color update inquery from : " + url);
 
-			var pattern;
+			(function() {
+				var pIndex;
+				var pattern;
 
-			for(pattern in preconfiguredPages) {
-				var length = pattern.length;
-				if(pattern === url.substring(0, length)) {
-					//matches
-					sendResponse(preconfiguredPages[pattern]);
-					return; //only once
+				for(pIndex = 0; pIndex < preconfigPages.length; ++pIndex) {
+					pattern = preconfigPages[pIndex];
+					var length = pattern.length;
+					if(pattern === url.substring(0, length)) {
+						//matches
+						sendResponse([{
+							selector : defaultSelector,
+							color    : defaultColor
+						}]);
+						return; //only once
+					}
 				}
-			}
+			}());
+
 		} else {
 			return;
 		}
