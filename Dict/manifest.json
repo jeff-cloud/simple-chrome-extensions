@@ -10,6 +10,11 @@
 		}
 	},
 
+	"permissions": [
+		"tabs", "http://*/*", "https://*/*"
+	],
+
+
 	"background": {
 		"scripts": [ "background.js" ],
 		"persistent": false
@@ -19,6 +24,13 @@
 		"default_popup": "popup.htm",
 		"default_icon": "icon.png"
 	},
+
+	"content_scripts": [ 
+		{
+			"matches": [ "http://*/*", "https://*/*" ],
+			"js": [ "content.js" ]
+		} 
+	],
 
 	"content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'",
 	"manifest_version": 2
