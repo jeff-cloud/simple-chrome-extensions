@@ -7,7 +7,7 @@
 				{ populate : true }, 
 				function(windows) {
 			
-			chrome.windows.getCurrent({}, function(currWindow) {
+			chrome.windows.getCurrent({ populate : true }, function(currWindow) {
 				$scope.$apply(function() {
 					$scope.otherWindows = [];
 					$scope.allWindows = windows;
