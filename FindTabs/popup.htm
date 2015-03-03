@@ -15,8 +15,20 @@
 		<input type="text" ng-model="title.title"></input>
 		<label>Url: </label>
 		<input type="text" ng-model="url.url"></input>
+		<input type="button" value="Bring All" ng-show="filteredTabs.length" ng-click="moveAllTabs(filteredTabs)"></input>
+		<div>
+				<div ng-repeat="x in allTabs | filter:title.title | filter:url.url as filteredTabs"></div>
+		</div>
 		<ul>
-			<li ng-repeat="w in result.windows">
+			<li>
+				<div>
+					<ul>
+						<li ng-repeat="t in currWindow.tabs | filter:title.title | filter:url.url">
+							<a href="#" ng-click="moveTab(w.id, t.id)">{{ t.title }} | {{ t.url }}</a></li>
+					</ul>
+				</div>
+			</li>
+			<li ng-repeat="w in otherWindows">
 				<div>{{w.id}}</div>
 				<div>
 					<ul>
@@ -26,6 +38,7 @@
 				</div>
 			</li>
 		</ul>
+		
 	</div>
 </body>
 </html>
